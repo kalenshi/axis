@@ -17,8 +17,7 @@ class App extends Component {
   }
   render() { 
     return (<div className="container">
-      
-        <button className="btn tbn-primary" onClick={this.handleLogin}>Login</button>
+        <a className="btn btbn-primary" href="/auth/google">Login</a>
     </div>);
   }
 }

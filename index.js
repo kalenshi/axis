@@ -10,6 +10,7 @@ const app = express();
 
 //middleware
 app.use(bodyParser.json());
+app.use('/assets', express.static(`${__dirname}/client`));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieSession({
     maxAge: 30 * 24 * 60 * 60 * 1000,
