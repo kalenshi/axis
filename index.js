@@ -36,7 +36,7 @@ function requireAuthentication(req, res){
 require('./routes/authGoogleRoutes')(app);
 app.get('/', (req, res) => {
     console.log(req.user);
-    res.send("Welcome home Motherfuckers");
+    res.send("Welcome home Enthusiasts");
 });
 
 // Server
