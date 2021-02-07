@@ -9,48 +9,48 @@ passportGoogle.serializeUser((user, done) => {
     done(null, user.id)
 });
 
-passportGoogle.deserializeUser((id, done)=>{
+passportGoogle.deserializeUser(async (id, done) => {
     //take the hash and find a model associated with this has
-    User.findById(id)
-        .then(foundUser=>{
+    try {
+        let foundUser = await User.findById(id);
+        if (foundUser) {
             done(null, foundUser);
-        })
-        .catch(err=>{
-            console.log("This is a Bogus user");
-            console.log(err);
-        });
+        }
+    } catch (err) {
+        console.log("This is a Bogus user");
+        console.log(err);
+    }
+
 });
 
 passportGoogle.use(new GoogleStrategy({
     clientID: keys.googleClientID,
     clientSecret: keys.googleClientSecret,
     callbackURL: "/auth/google/callback"
-}, (accessToken, refreshToken, profile, done) => {
-    const {id} = profile;
-    const {given_name: first_name, family_name: last_name, email} = profile._json;
-    //check if anyone in our database has this ID
-    User.findOne({googleId: id})
-        .then(existingUser => {
+}, async (accessToken, refreshToken, profile, done) => {
+    try {
+            const {id} = profile;
+            const {given_name: first_name, family_name: last_name, email} = profile._json;
+            const existingUser = await User.findOne({googleId: id});
             if (existingUser) {
                 done(null, existingUser);
-            } else {
-                new User({
-                    first_name,
-                    last_name,
-                    email,
-                    auth_type: 'googleOauth',
-                    googleId: id
+        } else {
+            const newUser = await new User({
+                first_name,
+                last_name,
+                email,
+                auth_type: 'googleOauth',
+                googleId: id
 
-                }).save()
-                    .then(newUser => {
-                       done(null, newUser);
-                    });
-            }
-        })
-        .catch(err => {
-            console.log("Error accessing the Database");
-            console.log(err);
-        });
+            }).save();
+            done(null, newUser);
+        }
+    } catch (e) {
+        console.log("Error Accessing the database");
+        console.log(e);
+    }
+
 
 }));
 module.exports = passportGoogle;
+
