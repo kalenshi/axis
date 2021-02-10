@@ -1,25 +1,40 @@
 import React, { Component } from 'react';
+import {BrowserRouter, Switch, Route, Redirect,Router} from 'react-router-dom';
+import {connect} from 'react-redux';
+import * as actions from './actions'
+import Home from './components/home';
+import NotFound from './components/notFound';
+import Header from './components/header';
+import SurveyNew from './components/surveysNew';
+import DashBoard from './components/dashboard';
+
+
 
 class App extends Component {
-  state = {  }
-
-  handleLogin = () =>{
-    console.log("We have to log you in");
-    fetch('http://localhost:5000/auth/google')
-    .then(success=>{
-        console.log("Success");
-        console.log(success);
-    })
-    .catch(err=>{
-      console.log("We have an error loggin in");
-      console.log(err);
-    })
+ 
+  componentDidMount(){
+    this.props.fetchUser();
   }
   render() { 
-    return (<div className="container">
-        <a className="btn btbn-primary" href="/auth/google">Login</a>
-    </div>);
+    return (           
+      <main className="container">
+        <BrowserRouter>
+        <Header/>
+        <div className="jumbotron">
+          <Switch>
+            <Route path="/not-found" component={NotFound}/>
+            <Route path="/surveys"  component={DashBoard} />
+            <Route path="/survey/new"  component={SurveyNew} />
+            <Route path="/" exact component={Home} />
+            <Redirect to='/not-found'/>
+          </Switch>
+        </div>
+      </BrowserRouter>
+    </main> );
   }
 }
  
-export default App;
+export default connect(null, actions)(App);
+
+
+

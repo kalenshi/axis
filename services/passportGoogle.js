@@ -17,7 +17,7 @@ passportGoogle.deserializeUser(async (id, done) => {
             done(null, foundUser);
         }
     } catch (err) {
-        console.log("This is a Bogus user");
+        console.log("This is a Malicious  user");
         console.log(err);
     }
 
@@ -29,25 +29,26 @@ passportGoogle.use(new GoogleStrategy({
     callbackURL: "/auth/google/callback"
 }, async (accessToken, refreshToken, profile, done) => {
     try {
-            const {id} = profile;
-            const {given_name: first_name, family_name: last_name, email} = profile._json;
-            const existingUser = await User.findOne({googleId: id});
-            if (existingUser) {
-                done(null, existingUser);
-        } else {
-            const newUser = await new User({
-                first_name,
-                last_name,
-                email,
-                auth_type: 'googleOauth',
-                googleId: id
-
-            }).save();
-            done(null, newUser);
+        const {id} = profile;
+        const {given_name: first_name, family_name: last_name, email} = profile._json;
+        const existingUser = await User.findOne({googleId: id});
+        if (existingUser) {
+            return done(null, existingUser);
         }
+        const newUser = await new User({
+            first_name,
+            last_name,
+            email,
+            auth_type: 'googleOauth',
+            googleId: id
+
+        }).save();
+        return done(null, newUser);
+
     } catch (e) {
         console.log("Error Accessing the database");
         console.log(e);
+        done(e, null);
     }
 
 
