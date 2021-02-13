@@ -1,6 +1,5 @@
-const mongoose = require('mongoose');
 
-const {Schema} = mongoose;
+const {Schema, model} = require('mongoose');
 
 let UserSchema = new Schema({
     first_name:{
@@ -15,14 +14,15 @@ let UserSchema = new Schema({
         type:String,
         required: false
     },
-    auth_type: {
+    auth_provider: {
         type:String,
         required: false
     },
-    googleId:{
-        type:String
+   auth_ID:{
+        type:String,
+       required:true
     },
 });
 
-module.exports = mongoose.model('User',UserSchema);
+module.exports = model('User',UserSchema);
 
