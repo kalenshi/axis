@@ -10,7 +10,6 @@ const app = express();
 
 //middleware
 app.use(bodyParser.json());
-app.use('/assets', express.static(`${__dirname}/client`));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieSession({
     maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -31,14 +30,8 @@ mongoose.connect(keys.mongoURI, {useNewUrlParser: true, useUnifiedTopology: true
     });
 
 //Authentication
-function requireAuthentication(req, res){
-
-}
 require('./routes/authGoogleRoutes')(app);
-app.get('/', (req, res) => {
-    console.log(req.user);
-    res.send("Welcome home Enthusiasts");
-});
+require('./routes/authFacebookRoutes')(app);
 
 //API ROUTES
 require('./routes/billingRoutes')(app);
