@@ -30,8 +30,9 @@ mongoose.connect(keys.mongoURI, {useNewUrlParser: true, useUnifiedTopology: true
     });
 
 //Authentication
-require('./routes/authGoogleRoutes')(app);
-require('./routes/authFacebookRoutes')(app);
+require('./routes/auth/authGoogleRoutes')(app);
+require('./routes/auth/authFacebookRoutes')(app);
+require('./routes/auth/login')(app);
 
 //API ROUTES
 require('./routes/billingRoutes')(app);

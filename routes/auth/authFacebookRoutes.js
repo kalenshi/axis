@@ -1,4 +1,4 @@
-const passport = require('../services/passportFacebook');
+const passport = require('../../services/passportFacebook');
 module.exports = (app) => {
     app.get('/auth/facebook', passport.authenticate('facebook'));
 

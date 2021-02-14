@@ -1,4 +1,4 @@
-const passport = require('../services/passportGoogle'); // TODO I'm not sure this is the right import
+const passport = require('../../services/passportGoogle'); // TODO I'm not sure this is the right import
 module.exports = (app) => {
     app.get('/auth/google', passport.authenticate('google', {
         scope: [
